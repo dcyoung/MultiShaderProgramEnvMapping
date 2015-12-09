@@ -1,0 +1,30 @@
+uniform mat4 modelMatrix;       
+uniform mat4 viewMatrix;        
+uniform mat4 projectionMatrix;  
+uniform vec3 UniformColor;
+// The texture.
+uniform sampler2D uSampler;
+
+attribute vec3 aVertexNormal;
+attribute vec3 aVertexPosition;   
+//attribute vec4 aVertexColor; 
+attribute vec2 aTexCoord;
+
+varying vec4 vColor;     
+//varying vec2 vTexCoord;   
+
+
+
+void main()
+{                    
+	//gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition, 1.0); 	       
+    //gl_PointSize = 10.0;                    
+    //vColor = aVertexColor; 
+	//vTexCoord=aTexCoord; 
+	
+	//since the height map img is grayscale, just grab any color (here red) and scale it up
+	float height = 5.0* texture2D(uSampler, aTexCoord).r;
+	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(aVertexPosition.x, aVertexPosition.y, aVertexPosition.z + height, 1.0); 	       
+    gl_PointSize = 10.0;                    
+    vColor = vec4(UniformColor, 1.0); //aVertexColor; 
+}                                       
